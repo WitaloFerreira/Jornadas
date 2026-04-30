@@ -18,5 +18,6 @@
     <string name="login_complete">Login concluído</string>
     <string name="regis_complete">Cadastro concluído</string>
     <string name="forgot_pass">Esqueceu a senha?</string>
+    <string name="interactive_map">Mapa de Memórias</string>
 
 </resources>

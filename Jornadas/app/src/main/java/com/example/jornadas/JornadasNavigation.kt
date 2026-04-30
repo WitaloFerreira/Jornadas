@@ -3,6 +3,7 @@ package com.example.jornadas
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -27,6 +28,7 @@ import com.example.compose.JornadasTheme
 import com.example.jornadas.ui.components.AppTopBar
 import com.example.jornadas.ui.screens.HomeBottomBar
 import com.example.jornadas.ui.screens.HomeScreen
+import com.example.jornadas.ui.screens.InteractiveMap
 import com.example.jornadas.ui.screens.LoginScreen
 import com.example.jornadas.ui.screens.MapScreen
 import com.example.jornadas.ui.screens.MemoryCreation
@@ -40,10 +42,8 @@ sealed class AppScreens(val route: String) {
     data object Home: AppScreens("home")
     data object Map: AppScreens("map")
 
-    data object InterativeMap: AppScreens("interativeMap")
+    data object InteractiveMap: AppScreens("interactiveMap")
     data object MemoryCreation: AppScreens("memoryCreation")
-
-    data object EditMemory : AppScreens("editMemory")
 }
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -86,7 +86,7 @@ fun JornadasApp() {
             bottomBar = {
                 if(showBottomBar) {
                     HomeBottomBar(
-                        onMapClick = { navController.navigate(AppScreens.InterativeMap.route) },
+                        onMapClick = { navController.navigate(AppScreens.InteractiveMap.route) },
                         createMemory = { navController.navigate(AppScreens.MemoryCreation.route) }
                     )
                 }
@@ -102,7 +102,9 @@ fun JornadasApp() {
                 } else {
                     AppScreens.Login.route
                 },
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding)
             ) {
                 composable(route = AppScreens.Login.route) {
                     LoginScreen(
@@ -154,6 +156,13 @@ fun JornadasApp() {
                             navController.previousBackStackEntry
                                 ?.savedStateHandle
                                 ?.set("location_address", endereco)
+                            navController.popBackStack()
+                        }
+                    )
+                }
+                composable(route = AppScreens.InteractiveMap.route) {
+                    InteractiveMap(
+                        onBackClick = {
                             navController.popBackStack()
                         }
                     )

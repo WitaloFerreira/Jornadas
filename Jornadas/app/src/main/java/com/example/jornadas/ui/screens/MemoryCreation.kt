@@ -116,7 +116,7 @@ fun MemoryCreation(
         if (uiState.imageUri?.isNotEmpty() == true) imageUri = Uri.parse(uiState.imageUri)
     }
 
-    val galleryLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+    val galleryLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument()) { uri ->
         if(uri != null) {
             val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
             context.contentResolver.takePersistableUriPermission(uri, flag)
@@ -128,7 +128,7 @@ fun MemoryCreation(
     val storagePermission = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) galleryLauncher.launch("image/*")
+        if (isGranted) galleryLauncher.launch(arrayOf("image/*"))
         else Toast.makeText(context, "Permissão de galeria negada", Toast.LENGTH_SHORT).show()
     }
 
