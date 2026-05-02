@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.jornadas.JornadasApplication
 import com.example.jornadas.viewmodels.home.HomeViewModel
+import com.example.jornadas.viewmodels.interactivemap.InteractiveViewModel
 import com.example.jornadas.viewmodels.mapscreen.MapViewModel
 import com.example.jornadas.viewmodels.memorycreation.MemoryViewModel
 
@@ -25,6 +26,10 @@ object AppViewModelProvider {
 
         initializer {
             MapViewModel(JornadasApplication())
+        }
+
+        initializer {
+            InteractiveViewModel(JornadasApplication().container.repository)
         }
     }
 }
