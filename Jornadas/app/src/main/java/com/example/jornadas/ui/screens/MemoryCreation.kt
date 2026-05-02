@@ -2,7 +2,6 @@ package com.example.jornadas.ui.screens
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.net.Uri
@@ -112,24 +111,15 @@ fun MemoryCreation(
         }
     }
 
-    LaunchedEffect(uiState.imageUri) {
-        if (uiState.imageUri?.isNotEmpty() == true) imageUri = Uri.parse(uiState.imageUri)
-    }
-
     val galleryLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
         if(uri != null) {
-            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            context.contentResolver.takePersistableUriPermission(uri, flag)
             imageUri = uri
             viewModel.onImageUriChange(uri.toString())
         }
     }
 
-    val storagePermission = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) galleryLauncher.launch("image/*")
-        else Toast.makeText(context, "Permissão de galeria negada", Toast.LENGTH_SHORT).show()
+    LaunchedEffect(uiState.imageUri) {
+        if (uiState.imageUri?.isNotEmpty() == true) imageUri = Uri.parse(uiState.imageUri)
     }
 
     Scaffold(
@@ -231,7 +221,7 @@ fun MemoryCreation(
             }
 
             FilledButton(
-                onclick = { storagePermission.launch(Manifest.permission.READ_MEDIA_IMAGES) },
+                onclick = { galleryLauncher.launch("image/*") },
                 text = stringResource(R.string.image_btn),
                 icon = Icons.Default.Image,
                 modifier = Modifier.padding(8.dp).fillMaxWidth()
